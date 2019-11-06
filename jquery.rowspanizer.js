@@ -30,38 +30,41 @@
     }
 
     $.extend( f.prototype, {
-      init: function() {
+        init: function() {
 
-        var _this = this;
+          var _this = this;
 
-        var $table = $(this.element);
-        var arr = [];
+          var $table = $(this.element);
+          var arr = [];
+          let f = function(el){
+            $table.find('tr').each(function (r, tr) {
+              $(this).find(el).each(function (d, el) {
+                if (_this.settings.columns.length === 0 || _this.settings.columns.indexOf(d) !== -1) {
+                  var $el = $(el);
+                  var v_dato = $el.html();
+                  if(typeof arr[d] != 'undefined' && 'dato' in arr[d] && arr[d].dato == v_dato) {
+                    var rs = arr[d].elem.data('rowspan');
+                    if(rs == 'undefined' || isNaN(rs)) rs = 1;
+                    arr[d].elem.data('rowspan', parseInt(rs) + 1).addClass('rowspan-combine');
+                    $el.addClass('rowspan-remove');
+                  } else {
+                    arr[d] = {dato: v_dato, elem: $el};
+                  };
+                }
+              });
+            });
 
-        $table.find('tr').each(function (r, tr) {
-          $(this).find('td').each(function (d, td) {
-            if (_this.settings.columns.length === 0 || _this.settings.columns.indexOf(d) !== -1) {
-              var $td = $(td);
-              var v_dato = $td.html();
-              if(typeof arr[d] != 'undefined' && 'dato' in arr[d] && arr[d].dato == v_dato) {
-                var rs = arr[d].elem.data('rowspan');
-                if(rs == 'undefined' || isNaN(rs)) rs = 1;
-                arr[d].elem.data('rowspan', parseInt(rs) + 1).addClass('rowspan-combine');
-                $td.addClass('rowspan-remove');
-              } else {
-                arr[d] = {dato: v_dato, elem: $td};
-              };
-            }
-          });
-        });
+            $('.rowspan-combine').each(function (r, tr) {
+              var $this = $(this);
+              $this.attr('rowspan', $this.data('rowspan')).css({'vertical-align': _this.settings.vertical_align});
+            });
 
-        $('.rowspan-combine').each(function (r, tr) {
-          var $this = $(this);
-          $this.attr('rowspan', $this.data('rowspan')).css({'vertical-align': _this.settings.vertical_align});
-        });
+            $('.rowspan-remove').remove();
+          };
 
-        $('.rowspan-remove').remove();
-
-      }
+          f('td');
+          f('th');
+        }
     } );
 
     $.fn[ rowspanizer ] = function( options ) {
