@@ -6,6 +6,8 @@ Dynamic rowspan based on the content of the table
 ### Demo
 
 <http://codepen.io/marcosesperon/pen/MyWNGx>
+<br>An example with headers:<br>
+<https://codepen.io/saier00/pen/jOOxPVB>
 
 ### jQuery
 
