@@ -15,7 +15,8 @@
     var rowspanizer = "rowspanizer",
       defaults = {
         vertical_align: "top",
-        columns: []
+        columns: [],
+        cellTypes: ['th', 'td']
       };
 
     function f ( element, options ) {
@@ -62,8 +63,9 @@
             $('.rowspan-remove').remove();
           };
 
-          f('td');
-          f('th');
+          for(var i = 0; i < _this.settings.cellTypes.length; i++) {
+            f(_this.settings.cellTypes[i]);
+          }
         }
     } );
 
